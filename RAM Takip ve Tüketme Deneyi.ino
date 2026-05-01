@@ -3,8 +3,8 @@
  * Bu kod, belleğin (SRAM) nasıl tükendiğini simüle eder.
  */
 
-extern int _brkval; // Heap üzerindeki son adresi tutan değişken
-extern int __malloc_heap_start; // Heap başlangıç adresi
+extern int *__brkval;
+extern char *__malloc_heap_start;
 
 String bellekCanavari = ""; // Belleği tüketecek olan dinamik değişken
 
@@ -28,13 +28,11 @@ void loop() {
 
 // Boş RAM hesaplama fonksiyonu
 int memoryFree() {
-  int freeValue; 
-  if ((int)_brkval == 0) {
-    // Heap boşsa başlangıç adresini kullan
+  int freeValue;
+  if ((int)__brkval == 0) {
     freeValue = ((int)&freeValue) - ((int)&__malloc_heap_start);
   } else {
-    // Heap doluysa güncel heap adresini kullan
-    freeValue = ((int)&freeValue) - ((int)_brkval);
+    freeValue = ((int)&freeValue) - ((int)__brkval);
   }
   return freeValue;
 }
